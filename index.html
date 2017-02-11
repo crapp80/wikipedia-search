@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Wikipedia Search</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <div class="container-fluid text-center custom well">
+      <div class="row">
+          <p><br><br></p>
+          <div class="col-xs-6 col-xs-offset-3">
+            <div class="input-group">
+              <span class="input-group-addon" id="addon1"><i class="fa fa-wikipedia-w" aria-hidden="true"></i></span>
+              <input type="text" name="search" class="form-control" placeholder="What are you looking for?" id="search" aria-describedby="addon1">
+              <span class="input-group-btn"><button id="inputbtn" class="btn btn-default" type="button"><i class="fa fa-search"></i></button></span>
+            </div>
+          </div>
+          <div class="col-xs-6 col-xs-offset-3">
+            <p><br><br></p>
+            <a class="btn btn-default btn-lg" href="https://en.wikipedia.org/wiki/Special:Random" target="blank" role="button">Random Article</a>
+            <p><br><br></p>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-xs-6 col-xs-offset-3 well output-title">
+          </div>
+      </div>
+  </div>
+<script>
+  $( document ).ready(function() {
+    $('#search').keypress(function(e) {
+      if(e.which == 13) {
+        $('#inputbtn').click ();
+      };
+    });
+    $('#inputbtn').click(function() {
+      $('.output-title').empty();
+      $.ajax({
+        url: 'https://en.wikipedia.org/w/api.php',
+        data: { action: 'query', list: 'search', srsearch: $("input[name=search]").val(), format: 'json' },
+        dataType: 'jsonp',
+        success: processResult
+      });
+    });
+    function processResult(apiResult){
+      $('.output-title').css("display", "block");
+      $('.output-title').html('<h3>Wikipedia Search Results:</h3><br>');
+      for (var i = 0; i < apiResult.query.search.length; i++){
+        var searchTitle = apiResult.query.search[i].title;
+        var wikiExt = 'https://en.wikipedia.org/wiki/' + searchTitle;
+        $('.output-title').append('<li>'+apiResult.query.search[i].title+'<a target="blank" href="' + wikiExt + '"> <i class="fa fa-external-link" aria-hidden="true"></i> </a></li>');
+      }
+    };
+  });
+</script>
+</body>
+</html>

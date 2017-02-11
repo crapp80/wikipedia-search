@@ -1,0 +1,17 @@
+@charset "utf-8";
+
+body {
+  font-family: 'Raleway', sans-serif;
+}
+
+.custom {
+  background-color: #2E5487;
+  width: 90%;
+  margin: 5vh auto auto auto;
+}
+
+.output-title {
+  display: none;
+  font-size: 16px;
+  background-color: #ffffff;
+}
